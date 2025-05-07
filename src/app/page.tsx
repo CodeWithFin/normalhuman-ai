@@ -61,4 +61,4 @@ const LandingPage = async () => {
     )
 }
 
-export default LandingPages
+export default LandingPage
