@@ -45,6 +45,8 @@ export const getAurinkoAuthorizationUrl = async (serviceType: 'Google' | 'Office
         returnUrl: `${process.env.NEXT_PUBLIC_URL}/api/aurinko/callback`,
     });
 
+    
+
     return `https://api.aurinko.io/v1/auth/authorize?${params.toString()}`;
 };
 
@@ -69,9 +71,16 @@ export const getAurinkoToken = async (code: string) => {
         }
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error('Error fetching Aurinko token:', error.response?.data);
+            console.error('Error fetching Aurinko token:', {
+                status: error.response?.status,
+                statusText: error.response?.statusText,
+                data: error.response?.data,
+                headers: error.response?.headers
+            });
+            throw new Error(`Failed to fetch Aurinko token: ${JSON.stringify(error.response?.data)}`);
         } else {
             console.error('Unexpected error fetching Aurinko token:', error);
+            throw error;
         }
     }
 }
